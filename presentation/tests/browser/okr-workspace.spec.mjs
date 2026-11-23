@@ -107,3 +107,38 @@ test('OKR links contain KPI records without direct process links',async({page})=
  await expect(details.locator('a[href*="/processes/"]')).toHaveCount(0);
  await expect(details).not.toContainText('فرآیندهای مرتبط');
 });
+
+test('administrators can add, disable and reactivate strategic pillars',async({page})=>{
+ await backend(page);
+ await page.goto('./#/okr');
+ const manager=page.getByText('مدیریت محورهای استراتژیک',{exact:true});
+ await expect(manager).toHaveCount(0);
+ await loginAdmin(page);
+ await manager.click();
+ const newName='بهبود گردش اطلاعات';
+ await page.getByLabel('نام محور جدید').fill(newName);
+ await page.getByRole('button',{name:'افزودن محور'}).click();
+ const active=page.getByRole('checkbox',{name:'فعال بودن محور '+newName});
+ await expect(active).toBeChecked();
+ await page.getByRole('button',{name:'هدف جدید',exact:true}).click();
+ const form=page.getByRole('dialog',{name:'فرم مدیریت OKR'});
+ await form.getByLabel('عنوان هدف').fill('افزایش دقت گردش اطلاعات');
+ await form.getByLabel('محور استراتژیک').selectOption(newName);
+ await form.getByRole('button',{name:'ذخیره آزمایشی'}).click();
+ const detail=page.getByRole('dialog',{name:'جزئیات هدف OKR'});
+ await expect(detail).toContainText(newName);
+ await detail.getByRole('button',{name:'بستن جزئیات'}).click();
+ await active.uncheck();
+ await page.reload();
+ await manager.click();
+ await expect(active).not.toBeChecked();
+ const filter=page.getByLabel('محور استراتژیک',{exact:true});
+ await filter.selectOption(newName);
+ await expect(page.getByRole('button',{name:'جزئیات هدف افزایش دقت گردش اطلاعات'})).toBeVisible();
+ await page.getByRole('button',{name:'هدف جدید',exact:true}).click();
+ await expect(form.getByLabel('محور استراتژیک').locator('option').filter({hasText:newName})).toHaveCount(0);
+ await form.getByRole('button',{name:'بستن فرم'}).click();
+ await active.check();
+ await page.getByRole('button',{name:'هدف جدید',exact:true}).click();
+ await form.getByLabel('محور استراتژیک').selectOption(newName);
+});

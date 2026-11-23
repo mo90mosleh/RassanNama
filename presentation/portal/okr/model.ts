@@ -13,7 +13,20 @@ export type OkrCheckIn={
  id:string;keyResultId:string;objectiveId:string;previous:number;value:number;
  confidence:OkrConfidence;note:string;createdAt:string;
 };
-export type OkrPortfolio={cycles:OkrCycle[];objectives:OkrObjective[];keyResults:OkrKeyResult[];checkins:OkrCheckIn[]};
+export type OkrPillar={name:string;active:boolean};
+export type OkrPortfolio={pillars?:OkrPillar[];cycles:OkrCycle[];objectives:OkrObjective[];keyResults:OkrKeyResult[];checkins:OkrCheckIn[]};
+/** Existing objectives supply the initial catalog for portfolios saved before pillar management. */
+export function strategicPillars(portfolio: OkrPortfolio): OkrPillar[] {
+ const catalog = new Map<string, OkrPillar>();
+ for (const objective of portfolio.objectives) {
+  if (typeof objective.pillar === 'string' && objective.pillar.trim()) {
+   catalog.set(objective.pillar, {name: objective.pillar, active: true});
+  }
+ }
+ for (const pillar of portfolio.pillars ?? []) catalog.set(pillar.name, pillar);
+ return [...catalog.values()];
+}
+
 export const confidenceLabels:Record<OkrConfidence,string>={
  ON_TRACK:'در مسیر',AT_RISK:'نیازمند توجه',OFF_TRACK:'خارج از مسیر'
 };
@@ -96,6 +109,7 @@ export function portfolioIsValid(value:unknown):value is OkrPortfolio{
  if(!value||typeof value!=='object')return false;
  const p=value as Partial<OkrPortfolio>;
  return Array.isArray(p.cycles)&&Array.isArray(p.objectives)&&Array.isArray(p.keyResults)&&Array.isArray(p.checkins)
+ &&(p.pillars===undefined||Array.isArray(p.pillars)&&p.pillars.every(axis=>axis&&typeof axis.name==='string'&&Boolean(axis.name.trim())&&typeof axis.active==='boolean'))
  &&p.objectives.every(x=>x&&typeof x.id==='string'&&typeof x.title==='string'&&typeof x.cycleId==='string')
  &&p.keyResults.every(x=>x&&typeof x.id==='string'&&typeof x.objectiveId==='string'&&Number.isFinite(x.baseline)&&Number.isFinite(x.current)&&Number.isFinite(x.target));
 }
