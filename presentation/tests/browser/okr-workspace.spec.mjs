@@ -132,7 +132,7 @@ test('administrators can add, disable and reactivate strategic pillars',async({p
  await page.reload();
  await manager.click();
  await expect(active).not.toBeChecked();
- const filter=page.getByLabel('محور استراتژیک',{exact:true});
+ const filter=page.getByLabel('فیلتر محور استراتژیک',{exact:true});
  await filter.selectOption(newName);
  await expect(page.getByRole('button',{name:'جزئیات هدف افزایش دقت گردش اطلاعات'})).toBeVisible();
  await page.getByRole('button',{name:'هدف جدید',exact:true}).click();

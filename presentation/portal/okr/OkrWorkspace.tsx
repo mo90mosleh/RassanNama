@@ -188,7 +188,7 @@ export function OkrWorkspace({data}:{data:Data}){
  const strategy=<>
   {summary}
   <div className="okr-panel">
-   <div className="okr-panel-head"><div><h3>نقشه هم‌راستاسازی اهداف</h3><small>روی هر کارت کلیک کنید تا جزئیات و KPIهای مرتبط نمایش داده شوند.</small></div><label className="okr-pillar-filter">محور استراتژیک<select value={pillar} onChange={e=>setPillar(e.target.value)}><option value="">همه محورها</option>{cyclePillars.map(axis=><option key={axis.name} value={axis.name}>{axis.name}{axis.active?'':' (غیرفعال)'}</option>)}</select></label></div>
+   <div className="okr-panel-head"><div><h3>نقشه هم‌راستاسازی اهداف</h3><small>روی هر کارت کلیک کنید تا جزئیات و KPIهای مرتبط نمایش داده شوند.</small></div><label className="okr-pillar-filter">محور استراتژیک<select aria-label="فیلتر محور استراتژیک" value={pillar} onChange={e=>setPillar(e.target.value)}><option value="">همه محورها</option>{cyclePillars.map(axis=><option key={axis.name} value={axis.name}>{axis.name}{axis.active?'':' (غیرفعال)'}</option>)}</select></label></div>
    {objectives.length?<div className="okr-map">
     {objectives.filter(x=>!x.parentId&&(!pillar||x.pillar===pillar||objectives.some(child=>child.parentId===x.id&&child.pillar===pillar))).map(rootGoal=><div key={rootGoal.id} className="okr-map-tree">
       <div className="okr-map-parent"><EntryCard goal={rootGoal} portfolio={portfolio} pace={pace(rootGoal)} owner={owner(rootGoal)} onSelect={()=>open(rootGoal.id)}/></div>
