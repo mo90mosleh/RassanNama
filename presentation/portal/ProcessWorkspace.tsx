@@ -15,7 +15,7 @@ const tabs:[ProcessWorkspaceSection,string,string,typeof Layers3][]=[
 ];
 export function ProcessWorkspace({data,section,refresh,detailId}:{data:Data;section:ProcessWorkspaceSection;refresh:()=>Promise<void>;detailId?:string}){
  return <div className="process-workspace">
-  <header className="process-workspace-header" data-tour="page-heading"><div><h1>مدیریت فرآیندها</h1><p>معماری سازمان، ارتباطات بین فرآیندها و شناسنامه‌های اجرایی در یک فضای کاری</p></div></header>
+  <header className="process-workspace-header" data-tour="page-heading"><div><h1>مدیریت فرآیندها</h1></div></header>
   <nav className="process-workspace-tabs" aria-label="بخش‌های مدیریت فرآیندها">
    {tabs.map(([id,label,to,Icon])=><Link key={id} to={to} className={section===id?'active':''} ariaLabel={label}><Icon size={17}/><span>{label}</span></Link>)}
   </nav>

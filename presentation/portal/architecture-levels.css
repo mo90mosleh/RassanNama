@@ -11,3 +11,12 @@
 .architecture-page .architecture-tree-row[data-level] .architecture-tree-name>svg{color:var(--level-ink)}
 .architecture-page .architecture-card[data-level].is-selected,
 .architecture-page .architecture-tree-row[data-level].is-current{outline:2px solid var(--level-ink);outline-offset:2px}
+
+.architecture-page .architecture-heading:empty { display: none; }
+.architecture-page .architecture-tools { margin-block: 0 8px; }
+.architecture-page .architecture-tools .architecture-search { flex: 1 1 150px; min-width: 0; }
+.architecture-page .architecture-display-switch { margin-inline-start: 0; flex-shrink: 0; }
+@media (max-width: 760px) {
+  .architecture-page .architecture-tools .architecture-status,
+  .architecture-page .architecture-tools .architecture-display-switch { order: 1; justify-self: start; }
+}
