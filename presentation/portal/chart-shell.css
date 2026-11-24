@@ -15,13 +15,6 @@
  color:var(--ink,#243447);
 }
 .app.chart-focus-mode .chart-shell-page-label-short{display:none}
-.app.chart-focus-mode .mobile-nama-brand{display:none}
-.app.chart-focus-mode .topbar .chart-menu-toggle{
- display:inline-flex;justify-content:center;align-items:center;min-height:40px;height:40px;
- border-radius:var(--radius-control,10px);border-color:var(--line,#dce3eb);
- background:var(--surface,#fff);color:var(--text-secondary,#526276);
-}
-.app.chart-focus-mode .topbar .chart-menu-toggle:hover{background:var(--surface-subtle,#f6f8fb)}
 .app.chart-focus-mode .topbar .company-logo{width:108px;max-width:15vw}
 .app.chart-focus-mode .topbar .org-text{min-width:0}
 .app.chart-focus-mode .topbar-actions{gap:8px}
@@ -70,11 +63,6 @@
  .app.chart-focus-mode .chart-shell-page-label-full{display:none}
  .app.chart-focus-mode .chart-shell-page-label-short{display:inline}
  .app.chart-focus-mode .chart-shell-page-title{font-size:12px}
- .app.chart-focus-mode .topbar .chart-menu-toggle{
-  width:42px;min-width:42px;height:42px;min-height:42px;padding:0 5px;gap:0;
- }
- .app.chart-focus-mode .topbar .chart-menu-toggle .nama-mark{width:28px}
- .app.chart-focus-mode .topbar .chart-menu-toggle>svg{display:none}
  .app.chart-focus-mode .topbar .company-logo{width:clamp(68px,22vw,90px);height:30px;max-width:none}
  .app.chart-focus-mode .topbar-actions{gap:5px;margin-right:auto}
  .app.chart-focus-mode .topbar-actions .global-back{min-width:40px;min-height:40px}

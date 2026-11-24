@@ -10,8 +10,9 @@ test('organizational chart uses the shared compact header and existing segmented
  await expect(page.locator('.topbar')).toBeVisible();
  await expect(page.locator('.topbar .company-logo')).toBeVisible();
  await expect(page.locator('.topbar .chart-shell-page-title')).toBeVisible();
- await expect(page.locator('.topbar .chart-menu-toggle')).toBeVisible();
- await expect(page.locator('.side')).toBeHidden();
+ await expect(page.locator('.topbar .chart-menu-toggle')).toHaveCount(0);
+ await expect(app).toHaveClass(/sidebar-collapsed/);
+ await expect(page.locator('.side')).toBeVisible();
  await expect(page.locator('.chart-header .chart-menu-toggle')).toHaveCount(0);
  await expect(page.locator('#chart-assistance-controls')).toHaveCount(0);
  await expect(page.getByRole('button',{name:'راهنمای این صفحه'})).toBeVisible();
@@ -32,17 +33,18 @@ test('organizational chart uses the shared compact header and existing segmented
  await expect(page.locator('.topbar')).toBeVisible();
  await expect(page.getByRole('radio',{name:'افقی',exact:true})).toHaveAttribute('aria-checked','true');
  await expect(page.getByRole('radiogroup',{name:'محتوای چارت'})).toBeVisible();
- await page.getByRole('button',{name:'نمایش منوی اصلی چارت'}).click();
- await expect(page.getByRole('dialog',{name:'منوی چارت سازمانی'})).toBeVisible();
- await page.keyboard.press('Escape');
- await expect(page.getByRole('dialog',{name:'منوی چارت سازمانی'})).not.toBeVisible();
+ const sidebarToggle = page.locator('.layout-menu-toggle');
+ await sidebarToggle.click();
+ await expect(app).not.toHaveClass(/sidebar-collapsed/);
+ await sidebarToggle.click();
+ await expect(app).toHaveClass(/sidebar-collapsed/);
 });
 test('compact header and immersive view fit on a small mobile viewport without horizontal overflow',async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await backend(page);await page.goto('./#/organization/chart');
  await expect(page.locator('.topbar')).toBeVisible();
  await expect(page.locator('.chart-shell-page-title')).toBeVisible();
- await expect(page.locator('.topbar .chart-menu-toggle')).toBeVisible();
+ await expect(page.locator('.topbar .chart-menu-toggle')).toHaveCount(0);
  await expect(page.getByRole('radiogroup',{name:'نمایش چارت'})).toBeVisible();
  await expect(page.getByRole('radiogroup',{name:'محتوای چارت'})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
