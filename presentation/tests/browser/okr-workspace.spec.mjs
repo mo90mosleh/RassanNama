@@ -1,7 +1,12 @@
 import{test,expect}from'@playwright/test';
 import{backend}from'./pages-backend.mjs';
+import{sampleAutumn1405}from'../../portal/okr/sample.ts';
 test.skip(!process.env.PAGES_BASE_PATH,'Pages build only');
 async function loginAdmin(page){
+ await page.addInitScript(portfolio=>{
+  const key='nama-okr-workspace-v1:8847c22d-0282-5b07-80b1-d34bc41a4efa';
+  if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(portfolio));
+ },sampleAutumn1405());
  await page.goto('./#/login');
  await page.getByLabel('ایمیل',{exact:true}).fill('mo90mosleh@gmail.com');
  await page.getByLabel('رمز عبور',{exact:true}).fill('correct-password');
@@ -14,13 +19,13 @@ async function loginAdmin(page){
 
 test('OKR appears as one shared navigation entry with three workspace tabs',async({page})=>{
  await backend(page);await page.goto('./#/okr');
- await expect(page.getByRole('heading',{name:'مدیریت OKR'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'OKR',exact:true})).toBeVisible();
  await expect(page.getByRole('navigation',{name:'منوی اصلی'}).getByRole('link',{name:'مدیریت OKR'})).toHaveCount(1);
  const tabs=page.getByRole('navigation',{name:'بخش‌های مدیریت OKR'});
  await expect(tabs.getByRole('button')).toHaveCount(3);
  await expect(page.locator('.okr-demo-banner')).toHaveCount(0);
  await expect(page.locator('.breadcrumb')).toHaveCount(0);
- await expect(page.locator('.okr-goal-card').first()).toBeVisible();
+ await expect(page.getByText('هدفی برای نمایش وجود ندارد.')).toBeVisible();
  await tabs.getByRole('button',{name:'اهداف و نتایج کلیدی'}).click();
  await expect(page.getByRole('button',{name:'جدولی'})).toBeVisible();
  await tabs.getByRole('button',{name:'پایش و عملکرد'}).click();
@@ -28,7 +33,7 @@ test('OKR appears as one shared navigation entry with three workspace tabs',asyn
 });
 test('interactive OKR check-in updates current KR value in local demo workspace',async({page})=>{
  await backend(page);await loginAdmin(page);
- await page.locator('.okr-goal-card').first().click();
+ await page.locator('.okr-tree-goal').first().click();
  await expect(page.getByRole('dialog',{name:'جزئیات هدف OKR'})).toBeVisible();
  await page.getByRole('dialog',{name:'جزئیات هدف OKR'}).getByRole('button',{name:'ثبت Check-in'}).first().click();
  const modal=page.getByRole('dialog',{name:'فرم مدیریت OKR'});
@@ -83,11 +88,11 @@ test('top breadcrumbs are removed from the integrated process workspace, KPI and
 
 test('keeps automatic schedule status without displaying expected percentages',async({page})=>{
  await page.clock.setFixedTime(new Date('2026-11-16T12:00:00Z'));
- await backend(page);await page.goto('./#/okr');
- await expect(page.locator('.okr-goal-card.is-company .okr-status')).toHaveText('نیازمند توجه');
+ await backend(page);await loginAdmin(page);
+ await expect(page.locator('.okr-tree-goal .okr-status').first()).toHaveText('نیازمند توجه');
  await expect(page.locator('.okr-current-cycle')).not.toContainText('انتظار');
  await expect(page.locator('.okr-card-expected')).toHaveCount(0);
- await page.locator('.okr-goal-card.is-company').click();
+ await page.locator('.okr-tree-goal').first().click();
  const details=page.getByRole('dialog',{name:'جزئیات هدف OKR'});
  await expect(details.locator('.okr-pace-detail')).toHaveCount(0);
  await expect(details.locator('.okr-detail-summary .okr-status')).toHaveText('نیازمند توجه');
@@ -99,8 +104,8 @@ test('keeps automatic schedule status without displaying expected percentages',a
 });
 
 test('OKR links contain KPI records without direct process links',async({page})=>{
- await backend(page);await page.goto('./#/okr');
- await page.locator('.okr-goal-card').first().click();
+ await backend(page);await loginAdmin(page);
+ await page.locator('.okr-tree-goal').first().click();
  const details=page.getByRole('dialog',{name:'جزئیات هدف OKR'});
  await details.getByRole('tab',{name:'ارتباطات'}).click();
  await expect(details.locator('a[href*="/kpis/"]')).not.toHaveCount(0);
@@ -132,8 +137,8 @@ test('administrators can add, disable and reactivate strategic pillars',async({p
  await page.reload();
  await manager.click();
  await expect(active).not.toBeChecked();
- const filter=page.getByLabel('فیلتر محور استراتژیک',{exact:true});
- await filter.selectOption(newName);
+ await page.locator('.okr-axis-filter summary').click();
+ await page.locator('.okr-axis-filter input[type=checkbox]').filter({visible:true}).and(page.getByRole('checkbox',{name:/بهبود گردش اطلاعات/})).check();
  await expect(page.getByRole('button',{name:'جزئیات هدف افزایش دقت گردش اطلاعات'})).toBeVisible();
  await page.getByRole('button',{name:'هدف جدید',exact:true}).click();
  await expect(form.getByLabel('محور استراتژیک').locator('option').filter({hasText:newName})).toHaveCount(0);

@@ -10,7 +10,9 @@ for(const direction of ['horizontal','vertical'])test(`direct reports align by p
  const titles=['معاون بازاریابی و فروش','مدیر فروش تهران','مدیر بازاریابی','سرپرست صادرات','کارشناس فروش'];
  const items=titles.map((label,index)=>({id:String(index),parentId:index?'0':null,label,kind:'position',closed:false,childCount:0,selected:false}));
  const [vicePresident,manager,peer,supervisor,specialist]=layoutChart(items,false,direction);
- assert.equal(manager.y,peer.y);
- assert.ok(vicePresident.y<manager.y&&manager.y<supervisor.y&&supervisor.y<specialist.y);
+ const reports=[manager,peer,supervisor,specialist];
+ const rank=direction==='vertical'?'y':'x';
+ assert.ok(reports.every(item=>item[rank]===manager[rank]));
+ assert.ok(direction==='vertical'?vicePresident.y<manager.y:vicePresident.x>manager.x);
  assert.deepEqual([manager,peer,supervisor,specialist].map(item=>item.parentId),['0','0','0','0']);
 });

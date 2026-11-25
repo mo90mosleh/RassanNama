@@ -1,28 +1,28 @@
 /* Canvas-shell layout for the organization chart.
    Never override the shared SegmentedControl buttons or their ARIA states. */
-.app.chart-focus-mode .topbar{
+.app.has-module-title .topbar{
  display:flex;position:sticky;top:0;z-index:45;
  width:100%;height:var(--app-header-height,60px);min-height:var(--app-header-height,60px);padding:5px 20px;
  background:var(--surface,#fff);border-bottom:1px solid var(--line,#dce3eb);
 }
-.app.chart-focus-mode .topbar .organization{gap:13px;min-width:0}
-.app.chart-focus-mode .chart-shell-entry{
+.app.has-module-title .topbar .organization{gap:13px;min-width:0}
+.app.has-module-title .chart-shell-entry{
  display:flex;align-items:center;gap:11px;flex:0 0 auto;
  padding-inline-end:14px;border-inline-end:1px solid var(--line,#dce3eb);
 }
-.app.chart-focus-mode .chart-shell-page-title{
+.app.has-module-title .chart-shell-page-title{
  margin:0;font-size:14px;line-height:1.5;font-weight:700;white-space:nowrap;
  color:var(--ink,#243447);
 }
-.app.chart-focus-mode .chart-shell-page-label-short{display:none}
-.app.chart-focus-mode .topbar .company-logo{width:108px;max-width:15vw}
-.app.chart-focus-mode .topbar .org-text{min-width:0}
-.app.chart-focus-mode .topbar-actions{gap:8px}
+.app.has-module-title .chart-shell-page-label-short{display:none}
+.app.has-module-title .topbar .company-logo{width:108px;max-width:15vw}
+.app.has-module-title .topbar .org-text{min-width:0}
+.app.has-module-title .topbar-actions{gap:8px}
 .app.chart-focus-mode .chart-focus-controls{
  display:flex;align-items:center;gap:10px;
  padding:8px 20px;min-height:60px;
  background:var(--surface,#fff);border-bottom:1px solid var(--line,#dce3eb);
- position:sticky;top:var(--app-header-height,60px);z-index:35;
+ position:sticky;top:0;z-index:35;
 }
 .app.chart-focus-mode .chart-header-switches{flex:1 1 auto;min-width:0;gap:9px}
 .app.chart-focus-mode .chart-header-actions{
@@ -46,27 +46,27 @@
  }
 }
 @media(max-width:1130px) and (min-width:761px){
- .app.chart-focus-mode .topbar .org-text{display:none}
+ .app.has-module-title .topbar .org-text{display:none}
  .app.chart-focus-mode .chart-focus-controls{flex-wrap:wrap}
  .app.chart-focus-mode .chart-header-switches{flex:1 1 690px}
  .app.chart-focus-mode .chart-header-actions{margin-inline-start:0}
  .app.chart-focus-mode .interactive-chart{height:calc(100dvh - 295px)}
 }
 @media(max-width:760px){
- .app.chart-focus-mode .topbar{
+ .app.has-module-title .topbar{
   display:flex;position:sticky;top:0;z-index:45;
   height:var(--app-header-height,56px);min-height:var(--app-header-height,56px);
   padding:5px 10px;
  }
- .app.chart-focus-mode .topbar .organization{gap:7px;min-width:0;flex:1 1 auto}
- .app.chart-focus-mode .chart-shell-entry{gap:6px;padding-inline-end:8px}
- .app.chart-focus-mode .chart-shell-page-label-full{display:none}
- .app.chart-focus-mode .chart-shell-page-label-short{display:inline}
- .app.chart-focus-mode .chart-shell-page-title{font-size:12px}
- .app.chart-focus-mode .topbar .company-logo{width:clamp(68px,22vw,90px);height:30px;max-width:none}
- .app.chart-focus-mode .topbar-actions{gap:5px;margin-right:auto}
- .app.chart-focus-mode .topbar-actions .global-back{min-width:40px;min-height:40px}
- .app.chart-focus-mode .topbar-actions .mobile-menu-button{min-width:40px;min-height:40px}
+ .app.has-module-title .topbar .organization{gap:7px;min-width:0;flex:1 1 auto}
+ .app.has-module-title .chart-shell-entry{gap:6px;padding-inline-end:8px}
+ .app.has-module-title .chart-shell-page-label-full{display:none}
+ .app.has-module-title .chart-shell-page-label-short{display:inline}
+ .app.has-module-title .chart-shell-page-title{font-size:12px}
+ .app.has-module-title .topbar .company-logo{width:clamp(68px,22vw,90px);height:30px;max-width:none}
+ .app.has-module-title .topbar-actions{gap:5px;margin-right:auto}
+ .app.has-module-title .topbar-actions .global-back{min-width:40px;min-height:40px}
+ .app.has-module-title .topbar-actions .mobile-menu-button{min-width:40px;min-height:40px}
  .app.chart-focus-mode .chart-focus-controls{
   position:relative;top:auto;display:flex;flex-wrap:wrap;gap:8px;
   padding:9px 12px;
@@ -81,9 +81,27 @@
  .app.chart-focus-mode .interactive-chart{height:calc(100dvh - 400px);min-height:320px}
 }
 @media(max-width:375px){
- .app.chart-focus-mode .topbar .organization{gap:4px}
- .app.chart-focus-mode .chart-shell-entry{padding-inline-end:5px;gap:4px}
- .app.chart-focus-mode .topbar-actions{gap:3px}
- .app.chart-focus-mode .topbar .company-logo{width:68px}
+ .app.has-module-title .topbar .organization{gap:4px}
+ .app.has-module-title .chart-shell-entry{padding-inline-end:5px;gap:4px}
+ .app.has-module-title .topbar-actions{gap:3px}
+ .app.has-module-title .topbar .company-logo{width:68px}
 }
 
+
+.app.chart-focus-mode .workspace-content:has(.chart-viewport) { display:flex; flex-direction:column; max-width:none; padding:0; }
+.app.chart-focus-mode .chart-focus-controls { padding:4px 8px; min-height:42px; }
+.app.chart-focus-mode .chart-content:has(.chart-viewport),
+.app.chart-focus-mode .chart-layout:has(.chart-viewport),
+.app.chart-focus-mode .chart-viewport { display:flex; flex-direction:column; flex:1; min-height:0; padding:0; gap:0; border:0; border-radius:0; }
+.app.chart-focus-mode .interactive-chart { flex:1; height:auto; min-height:0; }
+.app.chart-focus-mode .flow-org-node { width:100%; min-width:0; max-width:none; }
+.app.chart-focus-mode .flow-org-node .node-select strong { font-size:17px; }
+.app.chart-focus-mode .flow-org-node .position-department { font-size:13px; }
+.app.chart-focus-mode .chart-content>.chart-navigation-strip { top:8px; }
+
+.app.chart-focus-mode .chart-focus-controls:has(+ .chart-content .chart-viewport) {
+ margin:0; padding:0 4px; gap:4px; border-radius:0;
+}
+.app.chart-focus-mode .chart-viewport { margin:0; }
+.app.chart-focus-mode .chart-zoom-overview .flow-org-node .node-select strong { font-size:23px; line-height:1.2; }
+.app.chart-focus-mode .chart-zoom-compact .flow-org-node .node-select strong { font-size:20px; line-height:1.25; }

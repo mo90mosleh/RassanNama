@@ -57,8 +57,8 @@ export function enrichChartItems(items:ChartItem[],data:Data,mode:ChartAnalysisM
   const metric=unitId?metrics.get(unitId):undefined;
   const value=mode==='processes'?metric?.processes??0:mode==='kpis'?(item.kind==='position'?roleKpis.get(item.id)?.size:unitId?unitKpis.get(unitId)?.size:0)??0:undefined;
   const tone=mode==='department'&&unitId?PALETTE[colorGroup(unitId)%PALETTE.length]:
-   mode==='processes'&&value?value>=5?'#d1e8fa':'#eaf4fd':
-   mode==='kpis'&&value?value>=4?'#e4d7f9':'#f2ebfc':undefined;
+   mode==='processes'&&value?value>=5?'#b8daf6':value>=3?'#d1e8fa':'#eaf4fd':
+   mode==='kpis'&&value?value>=4?'#d7c3f4':value>=3?'#e4d7f9':'#f2ebfc':undefined;
   return {...item,descendantCount:descendantCount(item.id),previewChildren:(children.get(item.id)??[]).slice(0,4).map(child=>child.label),analysisValue:value,analysisLabel:mode==='processes'?'فرآیند مرتبط':mode==='kpis'?'شاخص مرتبط':undefined,tone};
  });
 }

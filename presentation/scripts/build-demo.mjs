@@ -1,5 +1,5 @@
 import{build}from'esbuild';import{createHash}from'node:crypto';import{readFile,writeFile,mkdir,cp}from'node:fs/promises';
-const result=await build({entryPoints:['portal/main.tsx'],bundle:true,minify:true,write:false,outfile:'portal.js',format:'iife',platform:'browser',target:'es2022',jsx:'automatic',loader:{'.woff2':'dataurl','.png':'dataurl'},define:{'process.env.NODE_ENV':'"production"'}});
+const result=await build({entryPoints:['portal/main.tsx'],bundle:true,minify:true,write:false,outfile:'portal.js',format:'iife',platform:'browser',target:'es2022',jsx:'automatic',loader:{'.woff2':'dataurl','.png':'dataurl','.jpg':'dataurl'},define:{'process.env.NODE_ENV':'"production"'}});
 const js=result.outputFiles.find(f=>f.path.endsWith('.js')).text.replace(/<\/script/gi,'<\\/script');const css=result.outputFiles.find(f=>f.path.endsWith('.css')).text;
 
 await mkdir('pages',{recursive:true});
@@ -19,7 +19,7 @@ const publicBuild=await build({
  outdir:'pages',entryNames:'assets/[name]-[hash]',chunkNames:'assets/chunks/[name]-[hash]',assetNames:'assets/media/[name]-[hash]',
  format:'esm',splitting:true,platform:'browser',target:'es2022',jsx:'automatic',metafile:true,
  // Logo URLs are used by DOM images on nested Pages routes.
- loader:{'.woff2':'file','.png':'file'},
+ loader:{'.woff2':'file','.png':'file','.jpg':'file'},
  define:{'process.env.NODE_ENV':'"production"'}
 });
 const publicEntry=Object.entries(publicBuild.metafile.outputs).find(([,meta])=>meta.entryPoint==='portal/main.tsx');

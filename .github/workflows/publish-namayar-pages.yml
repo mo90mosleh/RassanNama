@@ -2,6 +2,8 @@ name: Build and publish Rassan Pages
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
     paths:
@@ -48,6 +50,7 @@ jobs:
           export CHROMIUM_PATH="$(node --input-type=module -e 'import {chromium} from "@playwright/test"; console.log(chromium.executablePath())')"
           PAGES_BASE_PATH=/OrgDocsManagementSystem-demo/ npm run test:e2e -- tests/browser/person-contacts.spec.mjs tests/browser/chart-card-click.spec.mjs tests/browser/okr-workspace.spec.mjs tests/browser/compact-mobile-controls.spec.mjs
       - name: Publish artifacts to gh-pages
+        if: github.event_name != 'pull_request'
         shell: bash
         run: |
           set -euo pipefail

@@ -1,0 +1,33 @@
+.governance-panel { padding: clamp(1rem, 3vw, 1.5rem); }
+.governance-panel h2 { margin-block-start: 0; }
+.governance-panel, .governance-content { min-width: 0; }
+.governance-scroll { overflow-x: auto; margin-block: .8rem; }
+.governance-scroll table { border-collapse: collapse; width: 100%; }
+.governance-scroll th, .governance-scroll td {
+  padding: .65rem .8rem;
+  border-block-end: 1px solid var(--line, #e2e8f0);
+  text-align: start;
+  min-width: 6rem;
+}
+.governance-scroll thead th { background: var(--surface-muted, #f4f7f7); }
+.governance-scroll tbody th { min-width: 11rem; }
+.governance-content label, .governance-panel label { display: grid; gap: .35rem; max-width: 24rem; }
+.governance-content select, .governance-content input, .governance-panel select { width: 100%; }
+.governance-form { display: grid; gap: .8rem; margin-block: 1rem; }
+.governance-fields { display: grid; gap: .65rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
+.governance-legend, .governance-actions { display: flex; flex-wrap: wrap; gap: .65rem 1rem; }
+
+.apqc-heading,.apqc-trail,.apqc-trail span { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.apqc-heading { justify-content: space-between; }
+.apqc-heading a,.apqc-assigned a { color: var(--action,var(--brand)); }
+.apqc-trail { border-bottom: 1px solid var(--line); padding-block: 8px; margin-bottom: 12px; }
+.apqc-trail [aria-current] { color: var(--ink); font-weight: 700; }
+.apqc-band { padding: 12px; background: #edf5fb; border-radius: 12px; margin-block: 12px; }
+.apqc-band h3 { margin-bottom: 8px; }
+.apqc-band.apqc-support { background: #eef6ef; }
+.apqc-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,150px),1fr)); gap: 8px; }
+.apqc-card { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; text-align: start; background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; }
+.apqc-card:hover { border-color: var(--action,var(--brand)); }
+.apqc-card > span { display: flex; align-items: center; justify-content: space-between; width: 100%; color: var(--action,var(--brand)); }
+.apqc-card small { margin-top: auto; }
+.apqc-assigned,.apqc-attribution { margin-top: 15px; }

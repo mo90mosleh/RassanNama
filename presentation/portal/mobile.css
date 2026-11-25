@@ -45,3 +45,25 @@
  .chart-header .chart-format-switch svg,.chart-header .chart-view-switch svg{display:none}
  .chart-header .chart-direction-switch button span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 }
+.mobile-chart-crumbs,.mobile-chart-crumbs>span { display:flex; flex-wrap:wrap; align-items:center; gap:5px; }
+.mobile-chart-crumbs { flex:1; }
+.mobile-chart-crumbs [aria-current="location"] { font-weight:800; color:var(--ink); }
+.mobile-chart-results > li:has(>.person-avatar-group) { position:relative; overflow:visible; margin-block-start:38px; }
+.mobile-chart-results > li>.person-avatar-group { position:absolute; z-index:1; inset-block-start:-34px; inset-inline:0; justify-content:center; padding:0; pointer-events:none; }
+.mobile-chart-results > li>.person-avatar-group>button { pointer-events:auto; min-width:68px; width:68px; height:68px; border:3px solid #fff; box-shadow:0 2px 8px #233b5530; }
+.mobile-chart-results > li>.person-avatar-group>button:not(:first-child) { margin-inline-start:-13px; }
+.mobile-chart-results > li:has(>.person-avatar-group)>.mobile-chart-select { padding-block-start:45px; }
+
+
+.mobile-chart-location {
+ position:sticky; top:0; z-index:5; padding:4px 9px; margin-bottom:8px;
+ border:1px solid var(--line); border-radius:10px; background:var(--surface,#fff);
+}
+.mobile-chart-location .mobile-chart-crumbs button {
+ padding:3px 8px; min-height:34px; border-radius:6px; text-align:start;
+}
+.mobile-chart-crumbs [aria-current="location"] { background:#edf3f9; }
+.mobile-chart-browser > .mobile-chart-search { margin-bottom:10px; }
+.mobile-chart-results > li .flow-department-positions .person-avatar-button {
+ width:44px; height:44px; min-width:44px;
+}
