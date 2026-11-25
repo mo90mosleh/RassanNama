@@ -1,1 +1,0 @@
-import{a,b}from"./chunk-UJQ5C4F2.js";import"./chunk-NJUWBXXG.js";import"./chunk-7OIGX7AT.js";import"./chunk-44IP4RIM.js";import"./chunk-FXR6WVWL.js";import"./chunk-7KU5O5SG.js";import"./chunk-PGQRU6NB.js";export{a as GovernanceOverview,b as ProcessGovernance};
