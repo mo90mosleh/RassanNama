@@ -49,3 +49,27 @@ test('chart search finds units, positions and people across both views',async({p
  await highlighted.getByRole('button',{name:'اطلاعات همکار آزمون 0',exact:true}).click();
  await expect(page.getByRole('dialog',{name:'اطلاعات همکار'})).toContainText('همکار آزمون 0');
 });
+
+test('organization viewer opens the chart after login and can read assigned colleague details',async({page})=>{
+ const data=await backend(page,'VIEWER');
+ const position=data.positions.find(p=>p.title==='مدیر فروش تهران');
+ const person={id:crypto.randomUUID(),display_name:'همکار آزمایشی مشاهده‌گر',phone:null,email:null,extension:'201'};
+ data.persons=[person];
+ data.assignments=[{id:crypto.randomUUID(),person_id:person.id,position_id:position.id}];
+ const search=page.getByLabel('یافتن واحد، سمت یا شخص در چارت');
+ await page.goto('./#/organization/chart');
+ await search.fill(person.display_name);
+ await expect(page.getByRole('region',{name:'نتایج جست‌وجوی چارت'}).getByRole('button',{name:new RegExp(person.display_name)})).toHaveCount(0);
+ await page.goto('./#/login');
+ await page.getByLabel('ایمیل',{exact:true}).fill('viewer@example.com');
+ await page.getByLabel('رمز عبور',{exact:true}).fill('correct-password');
+ await page.getByRole('button',{name:'ورود',exact:true}).click();
+ await expect(page).toHaveURL(/#\/organization\/chart$/);
+ await search.fill(position.title);
+ await page.getByRole('region',{name:'نتایج جست‌وجوی چارت'}).getByRole('button',{name:position.title+' سمت',exact:true}).click();
+ await page.getByRole('button',{name:'بستن اطلاعات مرتبط'}).click();
+ await page.getByRole('button',{name:'اطلاعات '+person.display_name,exact:true}).click();
+ const dialog=page.getByRole('dialog',{name:'اطلاعات همکار'});
+ await expect(dialog).toContainText(person.display_name);
+ await expect(dialog.getByRole('link',{name:/تماس با داخلی/})).toHaveAttribute('href','sip:201');
+});

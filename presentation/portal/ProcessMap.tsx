@@ -1,13 +1,12 @@
 import {Modal} from './Modal';
 import{useMemo,useState,type FormEvent}from'react';
-import{Search,Plus,ArrowDown,Link2,Building2,ArrowUpLeft,ArrowRight,PenLine,Trash2,X}from'lucide-react';
+import{Search,Plus,Link2,Building2,ArrowUpLeft,ArrowRight,PenLine,Trash2,X}from'lucide-react';
 import type{Data,ProcessRelation,ProcessRelationType}from'./types';
 import{Link,errorMessage,number}from'./ui';
 import{config,mutate}from'./api';
 import{usePageSelection}from'./namayar/PageContextProvider';
 import{duplicateRelation,initialProcessFocus,loadProcessRelationOverlay,mergeProcessRelations,processNeighbors,processRelationTypes,removeDraftRelation,saveProcessRelationOverlay,upsertDraftRelation,validRelation,type RelationOverlay}from'./process-relationships';
 import{normalizeSearch}from'./architecture-navigation';
-import{ProcessNetwork}from'./ProcessNetwork';
 import'./process-map.css';
 
 export function ProcessMap({data,refresh}:{data:Data;refresh:()=>Promise<void>}){
@@ -59,6 +58,18 @@ export function ProcessMap({data,refresh}:{data:Data;refresh:()=>Promise<void>})
  };
  const linked = new Set(relations.flatMap(row=>[row.source_process_id,row.target_process_id]));
  const unlinked = filtered.filter(node=>!linked.has(node.id));
+ const groups = new Map<string, {title:string;nodes:Data['nodes']}>();
+ for(const node of filtered){
+  if(!linked.has(node.id))continue;
+  const parent=data.nodes.find(item=>item.id===node.parent_id&&item.kind==='GROUP');
+  const key=parent?.id??'';
+  const group=groups.get(key)??{title:parent?.name??'سایر فرآیندهای مرتبط',nodes:[]};
+  group.nodes.push(node);
+  groups.set(key,group);
+ }
+ const processCard=(node:Data['nodes'][number])=><button key={node.id} type="button" className="pm-value-step" onClick={()=>{setUnlinkedOpen(false);reveal(node.id);}}>
+  <bdi>{node.code}</bdi><span>{node.name}</span>
+ </button>;
  return <div className="process-map">
   <div className="process-map-tools">
    <div className="process-map-search-wrap"><label className="process-map-search"><Search size={17}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="نام یا کد فرآیند را پیدا کنید…" aria-label="جست‌وجوی فرآیند روی نقشه"/>{search&&<button className="icon-button" aria-label="پاک کردن جست‌وجو" onClick={()=>setSearch('')}><X size={14}/></button>}</label>
@@ -72,13 +83,19 @@ export function ProcessMap({data,refresh}:{data:Data;refresh:()=>Promise<void>})
   </div>
   {message&&<p role="status" className="alert success">{message}</p>}{error&&edit===undefined&&<p role="alert" className="alert error">{error}</p>}
   <div className="process-map-body">
-   <section className="panel process-map-canvas-panel">
-    <ProcessNetwork data={data} relations={relations} focus={focus} search={search.trim()} department={department} onFocus={reveal}/>
+   <section className="panel process-map-canvas-panel pm-value-panel" aria-label="فرآیندهای مرتبط">
+    <div className="pm-chain-grid">
+     {[...groups].map(([id,{title,nodes}])=><section className="pm-chain" key={id}>
+      <h2>{title}</h2>
+      <ul>{nodes.map(node=><li key={node.id}>{processCard(node)}</li>)}</ul>
+     </section>)}
+    </div>
+    {!groups.size&&<p className="muted">فرآیند مرتبطی با فیلتر فعلی پیدا نشد.</p>}
    </section>
   </div>
   {unlinkedOpen&&<Modal className="process-map-dialog" label="فرآیندهای بدون ارتباط" onClose={()=>setUnlinkedOpen(false)}>
     <header className="pm-side-title"><h2>فرآیندهای بدون ارتباط</h2><button type="button" className="icon-button" aria-label="بستن" onClick={()=>setUnlinkedOpen(false)}><X size={20}/></button></header>
-    <div className="pm-chain-extras">{unlinked.length?unlinked.map(node=><button key={node.id} type="button" className="pm-value-step" onClick={()=>{setUnlinkedOpen(false);reveal(node.id);}}><bdi>{node.code}</bdi><span>{node.name}</span></button>):<p>فرآیندی بدون ارتباط در این نما وجود ندارد.</p>}</div>
+    <div className="pm-chain-extras">{unlinked.length?unlinked.map(processCard):<p>فرآیندی بدون ارتباط در این نما وجود ندارد.</p>}</div>
   </Modal>}
   {current&&detailsOpen&&edit===undefined&&<Modal className="process-map-dialog" label="جزئیات ارتباط‌های فرآیند" onClose={()=>setDetailsOpen(false)}>
     <header className="pm-side-title"><Link2 size={17}/><h2>جزئیات ارتباط‌ها</h2><button type="button" className="icon-button" aria-label="بستن جزئیات ارتباط‌ها" onClick={()=>setDetailsOpen(false)}><X size={20}/></button></header>
