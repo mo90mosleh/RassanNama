@@ -1,3 +1,4 @@
+import { basename, extname } from 'node:path';
 import{build}from'esbuild';import{createHash}from'node:crypto';import{readFile,writeFile,mkdir,cp}from'node:fs/promises';
 const result=await build({entryPoints:['portal/main.tsx'],bundle:true,minify:true,write:false,outfile:'portal.js',format:'iife',platform:'browser',target:'es2022',jsx:'automatic',loader:{'.woff2':'dataurl','.png':'dataurl','.jpg':'dataurl'},define:{'process.env.NODE_ENV':'"production"'}});
 const js=result.outputFiles.find(f=>f.path.endsWith('.js')).text.replace(/<\/script/gi,'<\\/script');const css=result.outputFiles.find(f=>f.path.endsWith('.css')).text;
@@ -7,8 +8,11 @@ await mkdir('pages',{recursive:true});
 // Keep the private Worker artifact unchanged (it still receives the IIFE above).
 const publicBuild=await build({
  plugins:[{name:'document-relative-images',setup(builder){
-  builder.onLoad({filter:/\.png$/},async({path})=>{
-   const bytes=await readFile(path),name=path.split('/').pop().replace(/\.png$/,'')+'-'+createHash('sha256').update(bytes).digest('hex').slice(0,12)+'.png';
+  builder.onLoad({filter:/\.(?:png|jpg)$/},async({path})=>{
+   const bytes=await readFile(path);
+   const extension=extname(path);
+   const fingerprint=createHash('sha256').update(bytes).digest('hex').slice(0,12);
+   const name=basename(path,extension)+'-'+fingerprint+extension;
    await mkdir('pages/assets/media',{recursive:true});
    await writeFile('pages/assets/media/'+name,bytes);
    // Image src resolves against the document, unlike an ESM import.
@@ -18,8 +22,7 @@ const publicBuild=await build({
  entryPoints:['portal/main.tsx'],bundle:true,minify:true,write:true,
  outdir:'pages',entryNames:'assets/[name]-[hash]',chunkNames:'assets/chunks/[name]-[hash]',assetNames:'assets/media/[name]-[hash]',
  format:'esm',splitting:true,platform:'browser',target:'es2022',jsx:'automatic',metafile:true,
- // Logo URLs are used by DOM images on nested Pages routes.
- loader:{'.woff2':'file','.png':'file','.jpg':'file'},
+ loader:{'.woff2':'file'},
  define:{'process.env.NODE_ENV':'"production"'}
 });
 const publicEntry=Object.entries(publicBuild.metafile.outputs).find(([,meta])=>meta.entryPoint==='portal/main.tsx');

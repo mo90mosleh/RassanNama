@@ -39,3 +39,19 @@ test('external logo URLs resolve to emitted files relative to the Pages document
  for(const image of images)assert.ok((await stat(resolve(root,image[1]))).size>0);
  assert.doesNotMatch(js,/"\.\/media\/[^"]+\.png"/);
 });
+
+test('dashboard carousel images resolve under the GitHub Pages project path',async()=>{
+ const projectUrl=new URL('https://example.com/RassanNama/');
+ const html=await readFile(resolve(root,'index.html'),'utf8');
+ const entry=html.match(/<script type="module" src="\.\/([^"]+)"/)[1];
+ const js=await readFile(resolve(root,entry),'utf8');
+ for(const card of ['org','process','kpi','okr']){
+  const reference=[...js.matchAll(/new URL\("(\.\/assets\/media\/slide-[^"]+\.jpg)",document.baseURI\)/g)]
+   .find(([,path])=>path.startsWith('./assets/media/slide-'+card+'-'));
+  assert.ok(reference,'missing document-relative artwork for '+card);
+  const url=new URL(reference[1],new URL('?v=test#/dashboard',projectUrl));
+  assert.ok(url.pathname.startsWith(projectUrl.pathname+'assets/media/'));
+  const bytes=await readFile(resolve(root,url.pathname.slice(projectUrl.pathname.length)));
+  assert.equal(bytes.readUInt16BE(0),0xffd8,'expected JPEG artwork for '+card);
+ }
+});
