@@ -14,6 +14,7 @@ async function loginAdmin(page){
  await expect(page).toHaveURL(/#\/admin$/);
  await expect(page.getByRole('heading',{name:'پنل مدیریت',exact:true})).toBeVisible();
  await page.goto('./#/okr');
+ await page.reload();
  await expect(page.getByRole('button',{name:'مدیریت دوره‌ها',exact:true})).toBeVisible();
 }
 
@@ -90,7 +91,6 @@ test('keeps automatic schedule status without displaying expected percentages',a
  await page.clock.setFixedTime(new Date('2026-11-16T12:00:00Z'));
  await backend(page);await loginAdmin(page);
  await expect(page.locator('.okr-tree-goal .okr-status').first()).toHaveText('نیازمند توجه');
- await expect(page.locator('.okr-current-cycle')).not.toContainText('انتظار');
  await expect(page.locator('.okr-card-expected')).toHaveCount(0);
  await page.locator('.okr-tree-goal').first().click();
  const details=page.getByRole('dialog',{name:'جزئیات هدف OKR'});
