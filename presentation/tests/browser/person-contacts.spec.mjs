@@ -61,6 +61,7 @@ test('organization viewer opens the chart after login and can read assigned coll
  await search.fill(person.display_name);
  await expect(page.getByRole('region',{name:'نتایج جست‌وجوی چارت'}).getByRole('button',{name:new RegExp(person.display_name)})).toHaveCount(0);
  await page.goto('./#/login');
+ await expect(page.locator('#main button')).toHaveText('ورود');
  await page.getByLabel('ایمیل',{exact:true}).fill('viewer@example.com');
  await page.getByLabel('رمز عبور',{exact:true}).fill('correct-password');
  await page.getByRole('button',{name:'ورود',exact:true}).click();

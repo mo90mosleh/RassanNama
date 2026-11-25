@@ -6,6 +6,8 @@ test.skip(!process.env.PAGES_BASE_PATH,'Pages build only');
 test('process map uses the card layout with actual Rassan processes and opens their recorded relations',async({page})=>{
  const data=await backend(page);
  await page.goto('./#/process-map');
+ await expect(page.locator('.pm-connection-layer > path[marker-end]')).toHaveCount(data.relations.length);
+ await expect(page.locator('.pm-connection-layer > path[marker-start]')).toHaveCount(data.relations.filter(relation=>relation.relation_type==='RELATED').length);
  const relation=data.relations[0];
  const origin=data.nodes.find(node=>node.id===relation.source_process_id);
  const destination=data.nodes.find(node=>node.id===relation.target_process_id);

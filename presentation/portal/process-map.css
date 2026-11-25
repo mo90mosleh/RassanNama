@@ -69,3 +69,10 @@
 @media(max-width:650px) { .pm-value-panel { max-height:none; } .pm-chain-grid { grid-template-columns:1fr; } }
 .process-map-toolbar-actions { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:6px; margin-inline-start:auto; }
 .process-map-toolbar-actions .pm-unlinked-button { white-space:nowrap; }
+.pm-chain-grid { position:relative; gap:24px; }
+.pm-chain { padding:10px 20px; }
+.pm-chain li { margin-top:8px; }
+.pm-connection-layer { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; color:#596e84; }
+.pm-connection-layer > path { fill:none; stroke:currentColor; stroke-width:1.2; }
+.pm-related-connection { stroke-dasharray:4 3; }
+.pm-chain .pm-value-step { position:relative; }

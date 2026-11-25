@@ -7,6 +7,7 @@ import{config,mutate}from'./api';
 import{usePageSelection}from'./namayar/PageContextProvider';
 import{duplicateRelation,initialProcessFocus,loadProcessRelationOverlay,mergeProcessRelations,processNeighbors,processRelationTypes,removeDraftRelation,saveProcessRelationOverlay,upsertDraftRelation,validRelation,type RelationOverlay}from'./process-relationships';
 import{normalizeSearch}from'./architecture-navigation';
+import{ProcessMapConnections}from'./ProcessMapConnections';
 import'./process-map.css';
 
 export function ProcessMap({data,refresh}:{data:Data;refresh:()=>Promise<void>}){
@@ -67,7 +68,7 @@ export function ProcessMap({data,refresh}:{data:Data;refresh:()=>Promise<void>})
   group.nodes.push(node);
   groups.set(key,group);
  }
- const processCard=(node:Data['nodes'][number])=><button key={node.id} type="button" className="pm-value-step" onClick={()=>{setUnlinkedOpen(false);reveal(node.id);}}>
+ const processCard=(node:Data['nodes'][number])=><button key={node.id} type="button" data-process-id={node.id} className="pm-value-step" onClick={()=>{setUnlinkedOpen(false);reveal(node.id);}}>
   <bdi>{node.code}</bdi><span>{node.name}</span>
  </button>;
  return <div className="process-map">
@@ -85,6 +86,7 @@ export function ProcessMap({data,refresh}:{data:Data;refresh:()=>Promise<void>})
   <div className="process-map-body">
    <section className="panel process-map-canvas-panel pm-value-panel" aria-label="فرآیندهای مرتبط">
     <div className="pm-chain-grid">
+     <ProcessMapConnections relations={relations} layoutKey={filtered.map(node=>node.id).join(',')}/>
      {[...groups].map(([id,{title,nodes}])=><section className="pm-chain" key={id}>
       <h2>{title}</h2>
       <ul>{nodes.map(node=><li key={node.id}>{processCard(node)}</li>)}</ul>
