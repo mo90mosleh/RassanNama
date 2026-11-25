@@ -62,8 +62,8 @@ test('OKR module lives in the shared Nama workspace rather than a second vertica
  const workspace=await readFile(new URL('../portal/okr/OkrWorkspace.tsx',import.meta.url),'utf8');
  assert.match(app,/path==='\/okr'/);
  assert.match(shell,/\['\/okr','مدیریت OKR'/);
- assert.match(workspace,/className="okr-tabs"/);
- assert.match(workspace,/className="okr-detail"/);
+ assert.match(workspace,/aria-label="بخش‌های مدیریت OKR"/);
+ assert.match(workspace,/className="okr-detail okr-modal"/);
  assert.doesNotMatch(workspace,/className="sidebar"/);
 });
 
@@ -83,7 +83,7 @@ test('cycle directory replaces the demo-data banner and offers creation from the
  assert.match(workspace,/cycleManagerOpen/);
  assert.match(workspace,/cycleObjectives\.length/);
  assert.doesNotMatch(workspace,/okr-demo-banner/);
- assert.match(shell,/hideBreadcrumb=path==='\/architecture'\|\|path==='\/process-map'/);
+ assert.match(shell,/hideBreadcrumb=.*path==='\/architecture'.*path==='\/process-map'/);
  assert.match(shell,/path==='\/okr'\|\|path==='\/kpis'/);
  assert.match(shell,/\{!hideBreadcrumb&&<div className="breadcrumb"/);
 });

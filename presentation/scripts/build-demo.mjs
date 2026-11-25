@@ -1,5 +1,5 @@
 import{build}from'esbuild';import{createHash}from'node:crypto';import{readFile,writeFile,mkdir,cp}from'node:fs/promises';
-const result=await build({entryPoints:['portal/main.tsx'],bundle:true,minify:true,write:false,outfile:'portal.js',format:'iife',platform:'browser',target:'es2022',jsx:'automatic',loader:{'.woff2':'dataurl','.png':'dataurl'},define:{'process.env.NODE_ENV':'"production"'}});
+const result=await build({entryPoints:['portal/main.tsx'],bundle:true,minify:true,write:false,outfile:'portal.js',format:'iife',platform:'browser',target:'es2022',jsx:'automatic',loader:{'.woff2':'dataurl','.png':'dataurl','.jpg':'dataurl'},define:{'process.env.NODE_ENV':'"production"'}});
 const js=result.outputFiles.find(f=>f.path.endsWith('.js')).text.replace(/<\/script/gi,'<\\/script');const css=result.outputFiles.find(f=>f.path.endsWith('.css')).text;
 
 await mkdir('pages',{recursive:true});
@@ -19,7 +19,7 @@ const publicBuild=await build({
  outdir:'pages',entryNames:'assets/[name]-[hash]',chunkNames:'assets/chunks/[name]-[hash]',assetNames:'assets/media/[name]-[hash]',
  format:'esm',splitting:true,platform:'browser',target:'es2022',jsx:'automatic',metafile:true,
  // Logo URLs are used by DOM images on nested Pages routes.
- loader:{'.woff2':'file','.png':'file'},
+ loader:{'.woff2':'file','.png':'file','.jpg':'file'},
  define:{'process.env.NODE_ENV':'"production"'}
 });
 const publicEntry=Object.entries(publicBuild.metafile.outputs).find(([,meta])=>meta.entryPoint==='portal/main.tsx');
@@ -57,6 +57,7 @@ await mkdir('pages',{recursive:true});await writeFile('pages/index.html',publicH
 for(const file of ['favicon.svg','favicon.ico','apple-touch-icon.png'])await cp('portal/assets/'+file,'pages/'+file);
 
 if(snapshot){await cp('data/rassan-presentation.json','pages/rassan-presentation.json');await writeFile('pages/README.md','# نما — ارائه عمومی راسان\n\n۴۴ فرآیند، ۴۴ شناسنامه، ۴۴ شاخص و ۹۰ ارجاع سند از بستهٔ بازنگری ۰٫۱ (۲۰۲۶-۱۱-۰۴). پیشنهادها پیش‌نویس هستند. انتشار داده‌ها و لینک‌ها با دستور صریح مالک انجام شده است.\n\nدادهٔ زنده از Supabase خوانده می‌شود و در قطع اتصال، نسخهٔ ذخیره‌شده برای مشاهده باقی می‌ماند. Render لازم نیست. بازدید عمومی بدون ورود است. ورود مدیریتی با ایمیل/رمز Supabase انجام می‌شود؛ مدیر تأییدشده می‌تواند ساختار سازمان، شناسنامه‌ها و برند را در دیتابیس ذخیره کند. در قطع اتصال، نسخهٔ ذخیره‌شده با پیام مشخص و بدون ویرایش نمایش داده می‌شود. بازخوردها در مرورگر ذخیره و به JSON صادر می‌شوند.\n');}
+await cp('data/APQC-ATTRIBUTION.txt','pages/APQC-ATTRIBUTION.txt');
 await import('./build-licenses.mjs');
 
 // Preserve the separately maintained verification page in Pages releases.

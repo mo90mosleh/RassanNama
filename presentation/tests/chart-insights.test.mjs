@@ -32,7 +32,7 @@ test('analytics are scoped to real unit-owned processes and directly mapped KPIs
  assert.equal(kpis.find(n=>n.id==='a').analysisValue,3);
  assert.equal(kpis.find(n=>n.id==='b').analysisValue,1);
  assert.equal(kpis.find(n=>n.id==='root').analysisValue,0);
- assert.equal(kpis.find(n=>n.id==='a').tone,'#f2ebfc');
+ assert.equal(kpis.find(n=>n.id==='a').tone,'#e4d7f9');
  const role={id:'role:a|کارشناس فروش',parentId:null,label:'کارشناس فروش',unitId:'a',kind:'position',closed:false,childCount:0,selected:false};
  const roleMetrics=enrichChartItems([role],data,'kpis');
  assert.equal(roleMetrics[0].analysisValue,2,'position-specific KPIs exclude department-only ones');

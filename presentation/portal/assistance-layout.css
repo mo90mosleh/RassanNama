@@ -89,3 +89,16 @@ body:has(.feedback-root) .namayar-launcher{bottom:calc(var(--navigation-height) 
 .chart-menu-open .side .nav a{justify-content:flex-start;padding:12px;gap:10px;font-size:13px;min-height:46px}
 .chart-menu-open .side .nav svg{width:19px;height:19px}
 .chart-menu-open .chart-menu-close{align-self:flex-end;min-width:40px;min-height:40px;margin-bottom:12px}
+
+.nama-loading-art { display:block; width:min(224px,100%); height:auto; margin:8px auto 0; }
+@media(prefers-reduced-motion:no-preference) {
+ .nama-loading-head { animation:nama-loading-bob 4s ease-in-out infinite; }
+ .nama-loading-eyes { transform-box:fill-box; transform-origin:center; animation:nama-loading-blink 4s ease-in-out infinite; }
+ .nama-loading-hand { animation:nama-loading-tap .64s ease-in-out infinite alternate; }
+ .nama-loading-hand + .nama-loading-hand { animation-delay:-.32s; }
+ .nama-loading-data { animation:nama-loading-data 1.3s ease-in-out infinite alternate; }
+}
+@keyframes nama-loading-bob { 50% { transform:translateY(3px); } }
+@keyframes nama-loading-blink { 47%,52% { transform:scaleY(.15); } 44%,55% { transform:scaleY(1); } }
+@keyframes nama-loading-tap { to { transform:translateY(3px); } }
+@keyframes nama-loading-data { to { opacity:.45; } }

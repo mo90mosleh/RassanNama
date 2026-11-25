@@ -60,10 +60,9 @@ test('architecture, process map and catalog share one module while keeping legac
  assert.match(workspace,/\/process-map/);
  assert.match(map,/processNeighbors\(relations,current.id\)/);
  assert.match(map,/mutate\(edit\?\.id\?'relations\/'\+edit.id:'relations'/);
- const cards=app.match(/className="hero panel concept-card"/g)||[];
- assert.equal(cards.length,4);
- assert.doesNotMatch(app,/eyebrow">روش انجام کار را بشناسید/);
- assert.match(app,/h2>مدیریت OKR<\/h2>/);
+ const dashboard=await readFile(new URL('../portal/DashboardWidgets.tsx',import.meta.url),'utf8');
+ assert.match(app,/<DashboardWidgets data=\{data\}\/>/);
+ for(const path of ['/organization/chart','/architecture','/kpis','/okr'])assert.ok(dashboard.includes("path:'"+path+"'"));
 });
 test('target-and-arrow OKR icon is reused on desktop and mobile',async()=>{
  const icon=await readFile(new URL('../portal/TargetArrowIcon.tsx',import.meta.url),'utf8');

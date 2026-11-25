@@ -5,7 +5,7 @@ async function setup(page){const d=await backend(page),position=d.positions.find
  d.assignments=d.persons.map(p=>({id:crypto.randomUUID(),person_id:p.id,position_id:position.id}));
  await page.goto('./#/login');await page.getByLabel('ایمیل',{exact:true}).fill('mo90mosleh@gmail.com');await page.getByLabel('رمز عبور',{exact:true}).fill('correct-password');await page.getByRole('button',{name:'ورود',exact:true}).click();
  await expect(page).toHaveURL(/#\/admin$/);await expect(page.getByRole('heading',{name:'پنل مدیریت',exact:true})).toBeVisible();
- await page.goto('./#/organization/chart');await page.getByLabel('یافتن واحد، سمت یا شخص در چارت').fill(position.title);await page.getByRole('region',{name:'نتایج جست‌وجوی چارت'}).getByRole('button',{name:position.title+' فروش تهران',exact:true}).click();
+ await page.goto('./#/organization/chart');await page.getByLabel('یافتن واحد، سمت یا شخص در چارت').fill(position.title);await page.getByRole('region',{name:'نتایج جست‌وجوی چارت'}).getByRole('button',{name:position.title+' سمت',exact:true}).click();
  await page.getByRole('button',{name:'بستن اطلاعات مرتبط'}).click();return d;
 }
 test('multiple people, semantic zoom and desktop call links',async({page})=>{await setup(page);
@@ -21,7 +21,7 @@ test('multiple people, semantic zoom and desktop call links',async({page})=>{awa
  await expect(dialog.getByRole('link',{name:'تماس با موبایل همکار آزمون 0'})).toHaveAttribute('href','tel:09121234560');await expect(dialog.getByRole('link',{name:'تماس با داخلی همکار آزمون 0'})).toHaveAttribute('href','sip:200');
  await dialog.getByRole('button',{name:'همه افراد این جایگاه'}).click();await expect(page.locator('.person-contact-list li')).toHaveCount(6);await page.keyboard.press('Escape');
  for(let i=0;i<4;i++){await page.getByRole('button',{name:'کوچک‌نمایی چارت',exact:true}).click();await page.waitForTimeout(160);}
- await expect(card.locator('.person-avatar-button')).toHaveCount(0);await expect(card.locator('.person-avatar-more')).toBeVisible();
+ await expect(card.locator('.person-avatar-button')).toHaveCount(1);await expect(card.locator('.person-avatar-more')).toBeVisible();
  for(let i=0;i<7;i++){await page.getByRole('button',{name:'بزرگ‌نمایی چارت',exact:true}).click();await page.waitForTimeout(160);}
  await expect(card.locator('.person-avatar-button')).toHaveCount(5);
 });
@@ -36,13 +36,16 @@ test('chart search finds units, positions and people across both views',async({p
  const search=page.getByLabel('یافتن واحد، سمت یا شخص در چارت');
  const results=page.getByRole('region',{name:'نتایج جست‌وجوی چارت'});
  await search.fill('فروش تهران');
- await results.getByRole('button',{name:'فروش تهران',exact:true}).click();
+ await results.getByRole('button',{name:'فروش تهران واحد',exact:true}).click();
  await expect(page.getByRole('radio',{name:'دپارتمان‌ها'})).toBeChecked();
  await search.fill('مدیر فروش تهران');
- await results.getByRole('button',{name:'مدیر فروش تهران فروش تهران',exact:true}).click();
+ await results.getByRole('button',{name:'مدیر فروش تهران سمت',exact:true}).click();
  await expect(page.getByRole('radio',{name:'سمت‌های سازمانی'})).toBeChecked();
  await page.getByRole('radio',{name:'دپارتمان‌ها'}).click();
  await search.fill('همکار آزمون 0');
  await results.getByRole('button',{name:/همکار آزمون 0/}).click();
+ const highlighted=page.locator('.flow-department-positions li[data-highlighted]');
+ await expect(highlighted).toContainText('همکار آزمون 0');
+ await highlighted.getByRole('button',{name:'اطلاعات همکار آزمون 0',exact:true}).click();
  await expect(page.getByRole('dialog',{name:'اطلاعات همکار'})).toContainText('همکار آزمون 0');
 });

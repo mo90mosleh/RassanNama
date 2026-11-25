@@ -1,0 +1,5 @@
+.table-sort { display:inline-flex; align-items:center; gap:5px; border:0; padding:0; background:transparent; text-align:start; color:inherit; font:inherit; }
+.table-sort svg { opacity:.56; flex:none; }
+th[aria-sort] .table-sort svg { opacity:1; color:var(--brand); }
+.clickable-table-row { cursor:pointer; }
+.clickable-table-row:focus-within,.clickable-table-row:hover { background:var(--surface-subtle,#f5f7fa); }

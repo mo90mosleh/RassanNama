@@ -14,7 +14,7 @@ export type OkrCheckIn={
  confidence:OkrConfidence;note:string;createdAt:string;
 };
 export type OkrPillar={name:string;active:boolean};
-export type OkrPortfolio={pillars?:OkrPillar[];cycles:OkrCycle[];objectives:OkrObjective[];keyResults:OkrKeyResult[];checkins:OkrCheckIn[]};
+export type OkrPortfolio={sampleVersion?:number;pillars?:OkrPillar[];cycles:OkrCycle[];objectives:OkrObjective[];keyResults:OkrKeyResult[];checkins:OkrCheckIn[]};
 /** Existing objectives supply the initial catalog for portfolios saved before pillar management. */
 export function strategicPillars(portfolio: OkrPortfolio): OkrPillar[] {
  const catalog = new Map<string, OkrPillar>();
