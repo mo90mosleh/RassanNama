@@ -21,7 +21,7 @@ test('multiple people, semantic zoom and desktop call links',async({page})=>{awa
  await expect(dialog.getByRole('link',{name:'تماس با موبایل همکار آزمون 0'})).toHaveAttribute('href','tel:09121234560');await expect(dialog.getByRole('link',{name:'تماس با داخلی همکار آزمون 0'})).toHaveAttribute('href','sip:200');
  await dialog.getByRole('button',{name:'همه افراد این جایگاه'}).click();await expect(page.locator('.person-contact-list li')).toHaveCount(6);await page.keyboard.press('Escape');
  for(let i=0;i<4;i++){await page.getByRole('button',{name:'کوچک‌نمایی چارت',exact:true}).click();await page.waitForTimeout(160);}
- await expect(card.locator('.person-avatar-button')).toHaveCount(0);await expect(card.locator('.person-avatar-more')).toBeVisible();
+ await expect(card.locator('.person-avatar-button')).toHaveCount(1);await expect(card.locator('.person-avatar-more')).toBeVisible();
  for(let i=0;i<7;i++){await page.getByRole('button',{name:'بزرگ‌نمایی چارت',exact:true}).click();await page.waitForTimeout(160);}
  await expect(card.locator('.person-avatar-button')).toHaveCount(5);
 });
@@ -44,5 +44,8 @@ test('chart search finds units, positions and people across both views',async({p
  await page.getByRole('radio',{name:'دپارتمان‌ها'}).click();
  await search.fill('همکار آزمون 0');
  await results.getByRole('button',{name:/همکار آزمون 0/}).click();
+ const highlighted=page.locator('.flow-department-positions li[data-highlighted]');
+ await expect(highlighted).toContainText('همکار آزمون 0');
+ await highlighted.getByRole('button',{name:'اطلاعات همکار آزمون 0',exact:true}).click();
  await expect(page.getByRole('dialog',{name:'اطلاعات همکار'})).toContainText('همکار آزمون 0');
 });

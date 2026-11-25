@@ -10,7 +10,7 @@ for(const width of [320,390,760])test(`filters and architecture controls fit ${w
    expect(box.height).toBeGreaterThanOrEqual(42);
   }
  };
- for(const route of ['kpis','processes']){
+ for(const route of ['kpis?tab=profiles','processes']){
   await page.goto('./#/'+route);
   const filters=page.locator('.mobile-filter-disclosure');
   await filters.locator('summary').click();
